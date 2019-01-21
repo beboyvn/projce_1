@@ -1,0 +1,31 @@
+{% extends 'layouts/layout.html' %}
+{% block title  %}
+    Mỹ phẩm Đẹp
+{% endblock  %}
+{% block head %}
+  {{ super() }}
+  <style type="text/css">
+    .important { color: #336699; }
+  </style>
+{% endblock %}
+{% block content %}
+  <h3>Đăng nhập Quản trị</h3>
+    <form method="post" action="/quan_tri/login">
+      <div class="DANG_NHAP"> 
+          <div class="alert" style="height:30px">
+              <input name="Th_Ten_dang_nhap" spellcheck="false" autocomplete="off" value=""
+                  required />
+          </div>
+          <div class="alert" style="height:30px">
+              <input name="Th_Mat_khau" type="password" spellcheck="false" autocomplete="off" value=""
+                  required/>
+          </div>
+          <div class="alert" style="height:40px">
+              <button class="btn btn-danger" type="submit">Đồng ý</button>
+          </div>               
+      </div>
+      <div>
+          <p class="important"> {{Chuoi_Thong_bao}}</p>
+      </div>
+    </form>
+{% endblock %}

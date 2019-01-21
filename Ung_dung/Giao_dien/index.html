@@ -1,0 +1,61 @@
+{% extends 'layouts/layout.html' %}
+{% block title  %}
+    Mỹ phẩm Đẹp
+{% endblock  %}
+{% block header %}
+  <header id="header_outer">
+  <div class="container">
+    <div class="header_section">
+      <div class="logo"><a href="javascript:void(0)"><img src="{{url_for('static',filename='css_js_client/img/logob.png')}}" alt="Lỗi hình ảnh"></a></div>
+      <nav class="nav" id="nav">
+        <ul class="toggle">
+          <li><a href="#top_content">Home</a></li>
+          <li><a href="#service">Services</a></li>
+          <li>
+            <button class="btn" type="button" id="dropdownMenuButton" data-toggle="modal"  data-target="#gioHang">Giỏ hàng</button>
+          </li> 
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <ul class="">
+          <li><a href="#top_content">Trang chủ</a></li>
+          <li><a href="#service">Phản hồi</a></li>
+          <li>
+            <div class="dropdown">
+              <button class="btn dropdown-toggle button3" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true">
+              Giỏ hàng</button>
+              <div class="dropdown-menu pull-right w-100 scrollable-menu" role="menu" aria-labelledby="dropdownMenuButton">                
+                {{chuoi_HTML_gio_hang}}</div>
+              </div>
+          </li> 
+          <li><a href="#contact">Liên hệ</a></li>
+        </ul>
+      </nav>
+      <a class="res-nav_click animated wobble wow"  href="javascript:void(0)"><i class="fa-bars"></i></a> </div>
+  </div>
+</header>
+
+{% endblock header %}
+{% block content %}
+  <div class="c-logo-part-1"><!--c-logo-part-start-->
+  <div class="container">
+    <ul class="delay-06s animated  bounce wow animated" style="visibility: visible; animation-name: bounce;">
+      <div class="section-title">
+      <h2 style="color: white;">Sản phẩm mới</h2>
+    </div>
+    </ul>
+  </div>
+</div>
+  {{chuoi_the_hien}}
+  {{chuoi_modal}}
+  <div class="modal fade scrollable-menu" id="gioHang" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>         
+            {{chuoi_HTML_gio_hang}}
+        </div>
+      </div>
+  </div>
+{% endblock  %}

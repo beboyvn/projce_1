@@ -1,0 +1,45 @@
+{% extends 'layouts/layout.html' %}
+{% block content %} 
+     <form method="post" action="/Dang_ky">
+        <div class="CUA_SO_1" style="background-color:whitesmoke">
+            <div class="THEM_MOI">
+                <div class="container">
+                    {{ form.csrf_token }}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th colspan="2">ĐĂNG KÝ THÀNH VIÊN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{ form.hidden_tag() }}    
+                            {% for field in form %}
+                            <!--  form.hidden_tag() => field.widget.input_type != 'hidden': để ẩn các form có tag hidden cụ thể là
+                            form csrf token -->        
+                            {% if not field.label()=='CSRF Token' and field.widget.input_type != 'hidden' %}                                         
+                                <tr>
+                                        <td>{{ field.label()}} </td>
+                                        <td>{{ field() }} </td>
+                                </tr>  
+                            {% endif %}                          
+                            {% endfor %}                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% for field in form %}
+                {% for message in field.errors %}
+                    <div class="btn TOM_TAT" style="color:red"> {{ message }}</div>
+                {% endfor %}             
+            {% endfor %}    
+        </div>
+
+        <div class="CUA_SO_2" style="margin:15px">
+            <div class="btn TOM_TAT" style="color:blue">
+            {{Chuoi_ket_qua}}
+            </div>
+        </div>
+    </form>
+
+
+{% endblock %}
