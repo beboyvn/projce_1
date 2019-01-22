@@ -41,6 +41,7 @@ def Tao_chuoi_HTML_Danh_sach_SP(Danh_sach_SP):
     <div class="isotope" style="position: relative; height: 480px;" id="portfolio-wrap"> 
     '''
     for san_pham in Danh_sach_SP:
+        Chuoi_Don_gia_Ban="Giá : {:,}".format(san_pham["don_gia"]).replace(",",".")    
         # <div class="hidden"> vì đang dùng boostrap3 tương đương với bootsrap4 là <div class="d-none">
         Chuoi_mo_ta_chi_tiet ='<div class="hidden" id="Noi_dung_chi_tiet_'+ str(san_pham["ma_san_pham"]) +'">'+ san_pham['mo_ta_chi_tiet'] +'</div>' if san_pham['mo_ta_chi_tiet']!=None else ""
         Chuoi_hinh ='''
@@ -52,7 +53,9 @@ def Tao_chuoi_HTML_Danh_sach_SP(Danh_sach_SP):
          <div class="project-overlay">
           <div class="project-info">
             <div class="zoom-icon"></div>
-            <h4 class="project-name" id="Ten_San_Pham_'''+ str(san_pham['ma_san_pham']) +'''">'''+san_pham['ten_san_pham']+ '''</h4>        
+            <h4 class="project-name" id="Ten_San_Pham_'''+ str(san_pham['ma_san_pham']) +'''">'''+san_pham['ten_san_pham']+ '''</h4>
+            <h5 class="project-name" style="color:#cc99ff;" >'''+ san_pham['tinh_trang'] + ''' </h5>
+            <h5 class="project-name" style="color:#ff66ff;" >'''+ Chuoi_Don_gia_Ban + ''' </h5>             
           </div>
           <button type="button" class="btn project-overlay" data-toggle="modal" data-target="#ID_'''+ str(san_pham['ma_san_pham']) +'''" ></button>
         </div>
@@ -150,7 +153,7 @@ def Tao_chuoi_HTML_gio_hang(Danh_sach_SP_chon):
                 Chuoi_Hinh_nho + Chuoi_Thong_tin + Chuoi_form+ '</div>' 
         Chuoi_HTML_Danh_sach +=Chuoi_HTML 
     Chuoi_Dat_hang = '''<div class="dropdown-item pull-right "><form method="post" action="/Dat_hang">  
-                <button class="btn button4" type="submit">Tiến hành đặt hàng</button>
+                <button class="btn button4">Tiến hành đặt hàng</button>
                 </form></div>'''
     Chuoi_HTML_Danh_sach +="</div>"
     
@@ -179,3 +182,50 @@ def Tao_chuoi_HTML_Khach_hang(Khach_hang):
                  Khach_hang["ten_khach_hang"] + "</a>"    
     Chuoi_HTML_Khach_hang += Chuoi_Thong_tin + Chuoi_Gio_hang+ '<li><a href="/Dang_xuat_khach_hang"><button class="btn button5" type="button" >Đăng xuất</button></a></li>'    
     return Markup(Chuoi_HTML_Khach_hang)  
+
+def Tao_chuoi_HTML_Dat_hang(Danh_sach_SP):
+    Tong_so_tien =0
+    Chuoi_HTML_Danh_sach='''
+    <div class="container">
+    <h2>ĐƠN HÀNG</h2>
+    <div class="work_section">
+      <div class="row">
+        <div class="col-lg-6 col-sm-6 wow fadeInLeft delay-05s animated" style="visibility: visible; animation-name: fadeInLeft;">
+    '''
+    for san_pham in Danh_sach_SP:
+        Thanh_tien = int(san_pham["So_luong"]) * int(san_pham["don_gia"])
+        Tong_so_tien += Thanh_tien
+
+        Chuoi_SP='<div class="service-list">'
+        Chuoi_hinh = '<div class="service-list-col1"> <img style="width:60px; height:60px;" src="'+\
+                    url_for('static',filename="hinh/hinh_san_pham/"+ san_pham["hinh"])+'"/> </div>'
+        Chuoi_noi_dung='''
+                <div class="service-list-col2">
+                    <h3>'''+san_pham['ten_san_pham']+'''</h3>
+                    <p>Số lượng: '''+ str(san_pham["So_luong"]) +'''</br>
+                    '''
+        Chuoi_Don_gia_Ban="Đơn giá Bán {:,}".format(san_pham["don_gia"]).replace(",",".")
+        Chuoi_Thanh_tien = "Thành tiền:" +str(san_pham["So_luong"]) +"x" + \
+                            "{:,}".format(san_pham["don_gia"]).replace(",",".") + " = " +\
+                            "{:,}".format(Thanh_tien).replace(",",".")
+        Chuoi_noi_dung+=''' 
+                    '''+ Chuoi_Don_gia_Ban +'''</br>
+                    '''+ Chuoi_Thanh_tien +'''    
+                    </p>
+                </div>
+                '''
+        Chuoi_SP+= Chuoi_hinh+Chuoi_noi_dung
+        Chuoi_SP+= '</div>'
+        Chuoi_HTML_Danh_sach+=Chuoi_SP
+
+    Chuoi_Tong_tien="<br/>Tổng tiền {:,}".format(Tong_so_tien).replace(",",".")
+    Chuoi_HTML_Danh_sach+='''
+
+        <div class="work_bottom"> <span>'''+ Chuoi_Tong_tien +'''</span> <a href="#contact" class="contact_btn">Đặt hàng</a> </div>
+        </div>
+        <figure class="col-lg-6 col-sm-6  text-right wow fadeInUp delay-02s animated" style="visibility: visible; animation-name: fadeInUp;"> </figure>
+      </div>
+    </div>
+    </div>
+    '''
+    return Markup(Chuoi_HTML_Danh_sach)

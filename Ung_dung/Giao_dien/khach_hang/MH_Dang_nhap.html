@@ -8,24 +8,55 @@
     .important { color: #336699; }
   </style>
 {% endblock %}
+{% block header %}
+  <header id="header_outer">
+  <div class="container">
+    <div class="header_section">
+      <div class="logo"><a href="javascript:void(0)"><img src="{{url_for('static',filename='css_js_client/img/logob.png')}}" alt="Lỗi hình ảnh"></a></div>
+      <nav class="nav" id="nav">
+        <ul class="toggle">
+          <li><a href="/">Trang chủ</a></li>
+          <li><a href="#contact">Liên hệ</a></li>
+        </ul>
+        <ul class="">
+          <li><a href="/">Trang chủ</a></li>
+          <li><a href="#contact">Liên hệ</a></li>
+        </ul>
+      </nav>
+      <a class="res-nav_click animated wobble wow"  href="javascript:void(0)"><i class="fa-bars"></i></a> </div>
+  </div>
+</header>
+
+{% endblock header %}
+
+
 {% block content %}
-  <h3>Đăng nhập Quản trị</h3>
+<div class="work_section">
+<div class="row">
+<div class="col-lg-6 col-sm-6 wow fadeInLeft delay-05s animated" style="visibility: visible; animation-name: fadeInLeft;">
     <form method="post" action="/Dang_nhap_khach_hang">
+    <h2>Khách hàng Đăng nhập</h2>
       <div class="DANG_NHAP"> 
-          <div class="alert" style="height:30px">
-              <input name="Th_Ten_dang_nhap" spellcheck="false" autocomplete="off" value=""
-                  required />
+        <h4>Tên đăng nhập </h4>
+          <input class="input-text animated wow flipInY delay-02s animated" style="height:30px"
+            name="Th_Ten_dang_nhap" spellcheck="false" autocomplete="off" value=""
+            required />
           </div>
-          <div class="alert" style="height:30px">
-              <input name="Th_Mat_khau" type="password" spellcheck="false" autocomplete="off" value=""
-                  required/>
-          </div>
-          <div class="alert" style="height:40px">
-              <button class="btn btn-danger" type="submit">Đồng ý</button>
-          </div>               
-      </div>
-      <div>
-          <p class="important"> {{Chuoi_Thong_bao}}</p>
+        <h4>Mật khẩu </h4>
+          <input class="input-text animated wow flipInY delay-02s animated" style="height:30px"
+            name="Th_Mat_khau" type="password" spellcheck="false" autocomplete="off" value=""
+            required/>
+          </input>
+           <div>
+            <h4 class="important"> {{Chuoi_Thong_bao}}</h4>
+            </div>  
+          <div >
+              <button class="btn button3" type="submit">Đồng ý</button>
+          </div> 
       </div>
     </form>
+</div>
+</div>
+<a href="/quan_tri/login">Đăng nhập cho nhân viên</a>
+</div>            
 {% endblock %}

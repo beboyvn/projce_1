@@ -1,0 +1,33 @@
+{% extends 'layouts/layout.html' %}
+{% block title  %}
+    Mỹ phẩm Đẹp
+{% endblock  %}
+{% block header %}
+  <header id="header_outer">
+  <div class="container">
+    <div class="header_section">
+      <div class="logo"><a href="javascript:void(0)"><img src="{{url_for('static',filename='css_js_client/img/logob.png')}}" alt="Lỗi hình ảnh"></a></div>
+      <nav class="nav" id="nav">
+        <ul class="toggle">
+          <li><a href="/">Trang chủ</a></li>
+          <li>{{Chuoi_HTML_Khach_hang}}</li>
+          <li>{{Chuoi_QL_Dang_nhap}}</li>
+          <li><a href="#contact">Liên hệ</a></li>
+        </ul>
+        <ul class="">
+          <li><a href="/">Trang chủ</a></li>
+          <li>{{Chuoi_HTML_Khach_hang}}</li>
+          <li>{{Chuoi_QL_Dang_nhap}}</li>
+          <li><a href="#contact">Liên hệ</a></li>
+        </ul>
+      </nav>
+      <a class="res-nav_click animated wobble wow"  href="javascript:void(0)"><i class="fa-bars"></i></a> </div>
+  </div>
+</header>
+
+{% endblock header %}
+{% block content %}
+
+  {{Chuoi_HTML_dat_hang}}
+
+{% endblock  %}

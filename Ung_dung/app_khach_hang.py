@@ -153,18 +153,18 @@ def Dang_nhap():
     Danh_sach_khach_hang=Doc_danh_sach_Khach_hang()
     Ten_dang_nhap=""
     Mat_khau=""
-    Chuoi_Thong_bao= "Xin vui lòng Nhập Tên đăng nhập(email) và Mật khẩu"
+    Chuoi_Thong_bao= "Xin vui lòng Nhập Tên đăng nhập và Mật khẩu"
     if request.method=='POST':
         Ten_dang_nhap=request.form.get('Th_Ten_dang_nhap')
         Mat_khau= request.form.get('Th_Mat_khau')
         Khach_hang= Dang_nhap_Khach_hang(Danh_sach_khach_hang,Ten_dang_nhap,Mat_khau)
-        print(Khach_hang)
+        print("khách hàng",Khach_hang)
         Hop_le=(Khach_hang!=None)
         if Hop_le:
             session['Khach_hang_dang_nhap']=Khach_hang
             return redirect(url_for('index'))
         else:
-            Chuoi_thong_bao="Đăng nhập không hợp lệ"
+            Chuoi_Thong_bao="Đăng nhập không hợp lệ"
     Khung =render_template('khach_hang/MH_Dang_nhap.html',Chuoi_Thong_bao=Chuoi_Thong_bao)
     return Khung
 
@@ -172,3 +172,23 @@ def Dang_nhap():
 def Dang_xuat_khach_hang():
     session.pop('Khach_hang_dang_nhap',None)
     return redirect(url_for("index"))
+@app.route('/Dat_hang',methods=['GET','POST'])
+def Dat_hang():
+    Chuoi_QL_Dang_nhap =""
+    Chuoi_HTML_dat_hang =""
+    Chuoi_Thong_bao =""
+    if session.get('Khach_hang_dang_nhap'):
+        SP_dat_hang = session['Gio_hang']['Gio_hang']
+        Chuoi_HTML_dat_hang= Tao_chuoi_HTML_Dat_hang(SP_dat_hang)
+        Khach_hang_dang_nhap = session['Khach_hang_dang_nhap']
+        Chuoi_HTML_Khach_hang= Tao_chuoi_HTML_Khach_hang(Khach_hang_dang_nhap)
+    else:
+        Chuoi_QL_Dang_nhap = '''
+        <a href="/Dang_nhap_khach_hang">
+        <button class="btn button3" role="button">Đăng nhập</button></a>
+        '''
+    Khung= render_template("khach_hang/MH_Dat_hang.html",
+                        Chuoi_HTML_Khach_hang= Chuoi_HTML_Khach_hang,
+                        Chuoi_QL_Dang_nhap=Chuoi_QL_Dang_nhap,
+                        Chuoi_HTML_dat_hang=Chuoi_HTML_dat_hang)
+    return Khung
