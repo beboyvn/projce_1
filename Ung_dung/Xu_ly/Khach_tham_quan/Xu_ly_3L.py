@@ -4,6 +4,8 @@ import sqlite3
 from Ung_dung.Xu_ly.Xu_ly_Model import *
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+#Thư viện sorting descrease
+from sqlalchemy import desc
 
 # khởi tạo session 
 Base.metadata.bind= engine
@@ -14,13 +16,14 @@ def Doc_danh_sach_SP():
     ds_San_pham_Lop_1 =None
     ds_San_pham =[]
     ds_San_pham_Lop_1 =session_1.query(San_pham).all()
-
+    
     for san_pham in ds_San_pham_Lop_1:
         san_pham_Lop_1= {"ma_san_pham":san_pham.ma_san_pham,"ten_san_pham": san_pham.ten_san_pham,\
                             "ma_loai":san_pham.ma_loai ,"noi_dung_tom_tat":san_pham.noi_dung_tom_tat,\
                             "mo_ta_chi_tiet":san_pham.mo_ta_chi_tiet,"don_gia":san_pham.don_gia,\
                             "DVT":san_pham.DVT, "tinh_trang":san_pham.tinh_trang,"hinh":san_pham.hinh,\
-                            "san_pham_moi":san_pham.san_pham_moi}
+                            "san_pham_moi":san_pham.san_pham_moi,"so_luong_ton":san_pham.so_luong_ton,\
+                            "don_gia_nhap":san_pham.don_gia_nhap}
         ds_San_pham.append(san_pham_Lop_1)
     return ds_San_pham
 def Doc_danh_sach_Khach_hang():
@@ -73,7 +76,7 @@ def Tao_chuoi_HTML_Modal(Danh_sach_SP,Da_dang_nhap):
             <div>
                 <form method="post" action="/">            
                     <input type="hidden" name="Th_Ma_so" value="'''+str(san_pham['ma_san_pham'])+'''"/>
-                    <input type="number" name="Th_So_luong" value="1" min="1" max="10"/>
+                    <input type="number" name="Th_So_luong" value="1" min="1" max="'''+ str(san_pham['so_luong_ton']) +'''"/>
                     <button type="submit" class="btn button3"><p class="text-white">Thêm vào giỏ hàng</p></button>
                 </form>
             </div>
@@ -81,9 +84,9 @@ def Tao_chuoi_HTML_Modal(Danh_sach_SP,Da_dang_nhap):
         else:
              Chuoi_form='''
                 <div>
-                    <form method="post" action="/">            
-                     <a href="/Dang_nhap_khach_hang"> <button type="button" class="btn button3"><p class="text-white">Thêm vào giỏ hàng</p></button></a>
-                    </form>
+                         
+                    <a href="/Dang_nhap_khach_hang"> <button type="button" class="btn button3"><p class="text-white">Thêm vào giỏ hàng</p></button></a>
+                
                 </div>
             '''
         Chuoi_mo_ta_chi_tiet ='<div>'+ str(san_pham['mo_ta_chi_tiet']) +'</div>' if san_pham['mo_ta_chi_tiet']!=None else ""
@@ -145,15 +148,16 @@ def Tao_chuoi_HTML_gio_hang(Danh_sach_SP_chon):
         
         Chuoi_form =  '''<div ><form method="post" action="/">            
                 <input type="hidden" name="Th_Ma_so_1" value="'''+san_pham["ma_san_pham"]+'''"/>
-                <input type="number" name="Th_So_luong_1" value="'''+str(san_pham["So_luong"])+'''" min="0" max="10"/>
+                <input type="number" name="Th_So_luong_1" value="'''+str(san_pham["So_luong"])+'''" min="0" max="'''+ str(san_pham['so_luong_ton']) +'''"/>
                 <button class="btn button5" type="submit">Cập nhật</button>
                 </form></div>'''
         
         Chuoi_HTML ='<div class="col-auto">' +  \
                 Chuoi_Hinh_nho + Chuoi_Thong_tin + Chuoi_form+ '</div>' 
         Chuoi_HTML_Danh_sach +=Chuoi_HTML 
-    Chuoi_Dat_hang = '''<div class="dropdown-item pull-right "><form method="post" action="/Dat_hang">  
-                <button class="btn button4">Tiến hành đặt hàng</button>
+        #!!!!!!!!!!!!! chú ý : đã có form cập nhật không thêm form ở Tiến hành đặt hàng ==> gây bug
+    Chuoi_Dat_hang = '''<div class="dropdown-item pull-right "><a href="/Dat_hang">  
+                <button class="btn button4" type="submit">Tiến hành đặt hàng</button></a>
                 </form></div>'''
     Chuoi_HTML_Danh_sach +="</div>"
     
@@ -183,7 +187,7 @@ def Tao_chuoi_HTML_Khach_hang(Khach_hang):
     Chuoi_HTML_Khach_hang += Chuoi_Thong_tin + Chuoi_Gio_hang+ '<li><a href="/Dang_xuat_khach_hang"><button class="btn button5" type="button" >Đăng xuất</button></a></li>'    
     return Markup(Chuoi_HTML_Khach_hang)  
 
-def Tao_chuoi_HTML_Dat_hang(Danh_sach_SP):
+def Tao_chuoi_HTML_Dat_hang(Danh_sach_SP,Khach_hang):
     Tong_so_tien =0
     Chuoi_HTML_Danh_sach='''
     <div class="container">
@@ -219,13 +223,29 @@ def Tao_chuoi_HTML_Dat_hang(Danh_sach_SP):
         Chuoi_HTML_Danh_sach+=Chuoi_SP
 
     Chuoi_Tong_tien="<br/>Tổng tiền {:,}".format(Tong_so_tien).replace(",",".")
+    Chuoi_Khach_hang ="</br> Tên khách hàng: "+ Khach_hang['ten_khach_hang'] +""
+    Chuoi_Khach_hang += "</br> Địa chỉ nhận hàng: "+ Khach_hang['dia_chi'] +""
+    Chuoi_Khach_hang+= "</br> Số ĐT: "+ Khach_hang['dien_thoai'] + ""
     Chuoi_HTML_Danh_sach+='''
-
-        <div class="work_bottom"> <span>'''+ Chuoi_Tong_tien +'''</span> <a href="#contact" class="contact_btn">Đặt hàng</a> </div>
+        <form method="post" action="/Dat_hang"> 
+        <input type="hidden" name="Th_Tong_tien" value="'''+ str(Tong_so_tien) + '''"/>
+        <div class="work_bottom"> <span>'''+ Chuoi_Tong_tien + Chuoi_Khach_hang+'''</span> 
+        <button type="submit" class="btn button3" >
+        Đặt hàng</a> 
+        </button>
         </div>
+        </form>
         <figure class="col-lg-6 col-sm-6  text-right wow fadeInUp delay-02s animated" style="visibility: visible; animation-name: fadeInUp;"> </figure>
       </div>
     </div>
     </div>
     '''
     return Markup(Chuoi_HTML_Danh_sach)
+
+def Lay_so_hoa_don():
+    so_hoa_don =None
+    Hoa_don = session_1.query(HoaDon).order_by(desc(HoaDon.so_hoa_don)).first()
+    # phải đặt trong dic Dạng {"var":obj.var} để lấy dữ liẹu
+    so_hoa_don = {"so_hoa_don":Hoa_don.so_hoa_don}
+    
+    return so_hoa_don["so_hoa_don"]

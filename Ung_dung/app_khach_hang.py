@@ -4,6 +4,7 @@ from datetime import datetime
 
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import exc
+from sqlalchemy import update
 
 from Ung_dung.Xu_ly.Khach_tham_quan.Xu_ly_3L import *
 
@@ -178,10 +179,41 @@ def Dat_hang():
     Chuoi_HTML_dat_hang =""
     Chuoi_Thong_bao =""
     if session.get('Khach_hang_dang_nhap'):
-        SP_dat_hang = session['Gio_hang']['Gio_hang']
-        Chuoi_HTML_dat_hang= Tao_chuoi_HTML_Dat_hang(SP_dat_hang)
-        Khach_hang_dang_nhap = session['Khach_hang_dang_nhap']
-        Chuoi_HTML_Khach_hang= Tao_chuoi_HTML_Khach_hang(Khach_hang_dang_nhap)
+        if session.get('Gio_hang'):
+            SP_dat_hang = session['Gio_hang']['Gio_hang']
+            Khach_hang_dang_nhap = session['Khach_hang_dang_nhap']
+            Chuoi_HTML_dat_hang= Tao_chuoi_HTML_Dat_hang(SP_dat_hang,Khach_hang_dang_nhap)
+            Chuoi_HTML_Khach_hang= Tao_chuoi_HTML_Khach_hang(Khach_hang_dang_nhap)
+
+            if request.method =='POST':
+                for san_pham in SP_dat_hang:
+                    so_luong_ton =san_pham['so_luong_ton']
+                    so_luong = int(san_pham["So_luong"])
+                    ma_san_pham =san_pham["ma_san_pham"]
+                    so_luong_ton_update = so_luong_ton-so_luong
+                    session_1.query(San_pham).filter(San_pham.ma_san_pham== ma_san_pham).update({"so_luong_ton":so_luong_ton_update})
+                    session_1.commit()
+
+
+
+                ngay_hd = datetime.now()
+                ma_khach_hang = session['Khach_hang_dang_nhap']['ma_khach_hang']
+                tri_gia = request.form.get('Th_Tong_tien')
+                so_hoa_don =request.form.get('Th_So_hoa_don')
+                print("trị giá",tri_gia)
+                print("mã khách hàng",ma_khach_hang)
+                print("số hóa đơn",so_hoa_don)
+                print("ngày HD",ngay_hd)
+                hd= HoaDon( ngay_hd=str(ngay_hd), ma_khach_hang=ma_khach_hang, tri_gia=tri_gia)
+                session_1.add(hd)
+                try:
+                    session_1.commit()
+                    return redirect(url_for('Ket_qua_dat_hang'))
+                except exc.SQLAlchemyError: 
+                    print("lỗi sql",exc.SQLAlchemyError)
+                    pass
+        else:
+            return redirect(url_for("index"))
     else:
         Chuoi_QL_Dang_nhap = '''
         <a href="/Dang_nhap_khach_hang">
@@ -192,3 +224,8 @@ def Dat_hang():
                         Chuoi_QL_Dang_nhap=Chuoi_QL_Dang_nhap,
                         Chuoi_HTML_dat_hang=Chuoi_HTML_dat_hang)
     return Khung
+
+@app.route("/Dat_hang_ket_qua")
+def Ket_qua_dat_hang():
+    session.pop('Gio_hang',None)
+    return "đà đặt thành công"

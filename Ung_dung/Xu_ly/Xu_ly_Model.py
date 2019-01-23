@@ -19,11 +19,13 @@ class San_pham(Base):
     ma_loai= Column(Integer,nullable=False)
     noi_dung_tom_tat = Column(String(255), nullable= False)
     #mo_ta_chi_tiet nullable =True
-    mo_ta_chi_tiet=Column(String(255))
+    mo_ta_chi_tiet=Column(String(1000))
     don_gia= Column(Integer,nullable=False)
     DVT= Column(String(20),nullable=False)
     tinh_trang= Column(String(100), nullable= False, default='Đang demo, chưa có hàng')
     hinh = Column(String(200))
+    so_luong_ton= Column(Integer, nullable=True)
+    don_gia_nhap = Column(Integer,nullable=True)
     san_pham_moi= Column(INTEGER(4),nullable=False,default=0)
 
 class CtHoaDon(Base):
@@ -39,10 +41,10 @@ class CtHoaDon(Base):
 class HoaDon(Base):
     __tablename__ = 'hoa_don'
 
-    so_hoa_don = Column(INTEGER(11), primary_key=True)
-    ngay_hd = Column(Date, nullable=False)
-    ma_khach_hang = Column(String(5 ), nullable=False)
-    tri_gia = Column(Float(asdecimal=True), nullable=False)
+    so_hoa_don = Column(Integer, autoincrement=True , primary_key=True)
+    ngay_hd = Column(String(100), nullable=False)
+    ma_khach_hang = Column(String(100 ), nullable=False)
+    tri_gia = Column(Integer,nullable=False)
 
 
 class KhachHang(Base):
