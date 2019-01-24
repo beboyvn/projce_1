@@ -8,6 +8,10 @@ from sqlalchemy import update
 
 from Ung_dung.Xu_ly.Khach_tham_quan.Xu_ly_3L import *
 
+#***cấu hình mail********
+from flask_mail import Mail, Message
+mail=Mail(app)
+
 #**********import form**************
     # import ckeditor
 from Ung_dung.Xu_ly.Khach_tham_quan.Xu_ly_Form import*
@@ -227,5 +231,39 @@ def Dat_hang():
 
 @app.route("/Dat_hang_ket_qua")
 def Ket_qua_dat_hang():
+    Ngay=datetime.now().strftime('%d-%m-%Y')
+    Khach_hang = session['Khach_hang_dang_nhap']
+    San_pham_dat_hang =session['Gio_hang']['Gio_hang']
+
+    Tieu_de="Xác nhận đặt hàng - Shop Mỹ phẩm đẹp -" +Ngay
+    Noi_dung_mail="Thân gửi khách hàng :" + Khach_hang['ten_khach_hang']+\
+        "<br/>Đơn hàng của bạn ở Shop Mỹ phẩm Đẹp đã được đặt thành công"+\
+        "<br/>Chi tiết đơn hàng:"
+    Tong_tien=0
+    for san_pham in San_pham_dat_hang:
+        CT_ID_SP = san_pham['ma_san_pham']
+        CT_So_luong= san_pham['So_luong']
+        CT_don_gia =int(san_pham['don_gia'] )* int(san_pham['So_luong'])
+        #lấy số hóa đơn mới được update
+        A_So_hoa_don = session_1.query(HoaDon).order_by(HoaDon.so_hoa_don.desc()).first()
+        So_HD= A_So_hoa_don.so_hoa_don
+        print("đơn giá",CT_don_gia)
+
+        #update CT hóa đơn
+        Chi_tiet_Hoa_don = CtHoaDon(id_san_pham=CT_ID_SP,so_luong=CT_So_luong,don_gia=CT_don_gia,so_hoa_don=So_HD)
+        session_1.add(Chi_tiet_Hoa_don)
+        session_1.commit()
+        #Tạo mail chi tiết đơn hàng
+        Tong_tien+= CT_don_gia
+        Noi_dung_mail+= "<br/>"+san_pham['ten_san_pham']+"---Số lượng:"+str(san_pham['So_luong'])+"---Thành tiền:{:,}".format(CT_don_gia).replace(",",".")
+        
+    Noi_dung_mail+= "<br/>Tổng tiền :{:,}".format(Tong_tien).replace(",",".") +\
+                    "<br/>Cảm ơn quý khách đã ủng hộ shop, sản phẩm sẽ được giao đến địa chỉ :"+ Khach_hang['dia_chi']
+
+    msg=Message(Tieu_de,sender='python244t7cn@gmail.com', recipients=[Khach_hang['email']])
+    mail.body=Noi_dung_mail
+    msg.html= mail.body
+    mail.send(msg)
+
     session.pop('Gio_hang',None)
-    return "đà đặt thành công"
+    return "đã đặt thành công"

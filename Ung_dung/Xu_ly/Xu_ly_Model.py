@@ -28,16 +28,6 @@ class San_pham(Base):
     don_gia_nhap = Column(Integer,nullable=True)
     san_pham_moi= Column(INTEGER(4),nullable=False,default=0)
 
-class CtHoaDon(Base):
-    __tablename__ = 'ct_hoa_don'
-
-    so_hoa_don = Column(String(5 ), nullable=False)
-    id_san_pham = Column(String(6 ), nullable=False)
-    so_luong = Column(INTEGER(11), nullable=False)
-    don_gia = Column(INTEGER(11), nullable=False)
-    stt = Column(INTEGER(11), primary_key=True)
-
-
 class HoaDon(Base):
     __tablename__ = 'hoa_don'
 
@@ -46,6 +36,18 @@ class HoaDon(Base):
     ma_khach_hang = Column(String(100 ), nullable=False)
     tri_gia = Column(Integer,nullable=False)
 
+class CtHoaDon(Base):
+    __tablename__ = 'ct_hoa_don'
+
+    
+    id_san_pham = Column(String(100), nullable=False)
+    so_luong = Column(INTEGER(11), nullable=False)
+    don_gia = Column(INTEGER(11), nullable=False)
+    stt = Column(INTEGER(11), primary_key=True)
+
+    #tao khóa ngoại cho bảng CtHoaDon tu HoaDon
+    so_hoa_don = Column(Integer, ForeignKey('hoa_don.so_hoa_don'))
+    hoa_don = relationship(HoaDon,backref='ct_hoa_don')
 
 class KhachHang(Base):
     __tablename__ = 'khach_hang'
