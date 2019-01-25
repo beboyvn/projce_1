@@ -36,7 +36,9 @@
     background-color: #555555;color: white;
   }
   .button4 {
+    font-size:16px;
     font-family:'Dosis';
+    height: 40px;
     font-weight: 600;
     background-color: #CC66FF;
     color: white;
@@ -51,12 +53,13 @@
    /* ****************search bar******************* */
   .search-bar {
     overflow: hidden;
+    padding-right: 40px;
     background-color: #fff0fc;
     width: 100%;
   }
   /* Style the search box inside the navigation bar */
   .search-bar input[type=text-search] {
-    float: left;
+    float: right;
     padding: 6px;
     border: none;
     margin-top: 8px;
@@ -66,7 +69,7 @@
 }
 
   .search-bar button {
-  float: left;
+  float: right;
   padding: 6px;
   margin-top: 8px;
   margin-bottom: 8px;

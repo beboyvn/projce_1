@@ -30,6 +30,11 @@ def index():
     Da_dang_nhap = False
     Danh_sach_SP_hien_thi=Danh_sach_san_pham
     Chuoi_tra_cuu =""
+#***************Menu lọc sản phẩm**********
+    Danh_sach_loai_SP= Doc_danh_sach_loai_SP()
+    Chuoi_HTML_Menu = Tao_chuoi_HTML_Menu(Danh_sach_loai_SP)
+    
+
 #**************Chức năng tìm kiếm********
     if request.form.get('Th_Chuoi_tra_cuu')!=None:
         Chuoi_tra_cuu=request.form.get('Th_Chuoi_tra_cuu')
@@ -49,8 +54,14 @@ def index():
         Da_dang_nhap=True
     else:
         Chuoi_QL_Dang_nhap = '''
+        <li>
         <a href="/Dang_nhap_khach_hang">
         <button class="btn button3" role="button">Đăng nhập</button></a>
+        </li>
+        <li>
+        <a href="/Dang_ky">
+        <button class="btn button4" role="button">Đăng ký</button></a>
+        </li>
         '''
 
 
@@ -123,6 +134,7 @@ def index():
     chuoi_the_hien=Tao_chuoi_HTML_Danh_sach_SP(Danh_sach_SP_hien_thi)
     chuoi_modal = Tao_chuoi_HTML_Modal(Danh_sach_san_pham,Da_dang_nhap)
     Khung =render_template("khach_hang/MH_Khach_hang.html",
+        Chuoi_HTML_Menu=Chuoi_HTML_Menu,
         Chuoi_tra_cuu= Chuoi_tra_cuu,
         Chuoi_HTML_Khach_hang= Chuoi_HTML_Khach_hang,
         Chuoi_QL_Dang_nhap=Markup(Chuoi_QL_Dang_nhap),
@@ -150,12 +162,27 @@ def Dang_ky():
         session_1.add(kh)
         try:
             session_1.commit()
-            Chuoi_ket_qua = "Đã tạo tài khoản thành công"
-
+            Chuoi_ket_qua = '''
+            
+                <div class="row">
+                    <div class="col-lg-6 col-sm-6 " style="visibility: visible;">
+                        <div class="work_bottom"> <span>Đã tạo tài khoản thành công</span> 
+                        <a href="/" class="contact_btn">Trở lại trang chủ</a> 
+                    </div>
+                </div>
+ 
+            '''
         except exc.SQLAlchemyError: 
             print(exc.SQLAlchemyError)
-            Chuoi_ket_qua= "Tên đăng nhập này đã có, Vui lòng tên đăng nhập khác"
+            Chuoi_ket_qua= '''
         
+                <div class="row" style="margin-top:1px;">
+                    <div class="col-lg-6 col-sm-6 " style="visibility: visible;">
+                        <div class="work_bottom"> <span>Tên đăng nhập này đã có, Vui lòng chọn tên đăng nhập khác</span> 
+                    </div>
+                </div>
+      
+            '''
     return render_template('khach_hang/MH_Dang_ky.html',form=form, Chuoi_ket_qua=Markup(Chuoi_ket_qua))
 
 @app.route("/Dang_nhap_khach_hang", methods=['GET','POST'])
@@ -274,4 +301,4 @@ def Ket_qua_dat_hang():
     mail.send(msg)
 
     session.pop('Gio_hang',None)
-    return "đã đặt thành công"
+    return render_template('khach_hang/MH_Dat_hang_thanh_cong.html')

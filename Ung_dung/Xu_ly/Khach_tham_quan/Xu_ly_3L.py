@@ -26,6 +26,18 @@ def Doc_danh_sach_SP():
                             "don_gia_nhap":san_pham.don_gia_nhap}
         ds_San_pham.append(san_pham_Lop_1)
     return ds_San_pham
+def Doc_danh_sach_loai_SP():
+    ds_loai_SP_lop_1=None
+    ds_loai_SP=[]
+    ds_loai_SP_lop_1= session_1.query(LoaiSanPham).all()
+
+    for loai_SP in ds_loai_SP_lop_1:
+        loai_SP_lop_1={"ma_loai":loai_SP.ma_loai,"ten_loai":loai_SP.ten_loai,\
+                        "url_ten_loai":loai_SP.url_ten_loai,"ma_loai_cha":loai_SP.ma_loai_cha,\
+                        "hinh":loai_SP.hinh}
+        ds_loai_SP.append(loai_SP_lop_1)
+    return ds_loai_SP
+
 def Doc_danh_sach_Khach_hang():
     ds_Khach_hang_Lop_1 =None
     ds_Khach_hang =[]
@@ -49,7 +61,8 @@ def Tao_chuoi_HTML_Danh_sach_SP(Danh_sach_SP):
         Chuoi_mo_ta_chi_tiet ='<div class="hidden" id="Noi_dung_chi_tiet_'+ str(san_pham["ma_san_pham"]) +'">'+ san_pham['mo_ta_chi_tiet'] +'</div>' if san_pham['mo_ta_chi_tiet']!=None else ""
         Chuoi_hinh ='''
         <div style="position: absolute; left: 0px; top: 0px; transform: translate3d(674px, 0px, 0px) 
-        scale3d(1, 1, 1); width: 337px; opacity: 1;" class="portfolio-item one-four  design  isotope-item">
+        scale3d(1, 1, 1); width: 337px; opacity: 1;" class="portfolio-item one-four '''+\
+        str(san_pham['ma_loai'])+'''  isotope-item" id="sp_'''+ str(san_pham['san_pham_moi']) +'''">
         <div class="portfolio-image"> <img src="'''+\
         url_for('static',filename='hinh/hinh_san_pham/'+san_pham["hinh"]) + ''' "alt="Portfolio 1"> </div>'''
         Chuoi_Overlay='''
@@ -255,18 +268,31 @@ def Tra_cuu_SP(Chuoi_tra_cuu,Danh_sach_SP):
         lambda SP: Chuoi_tra_cuu.upper() in SP['ten_san_pham'].upper(),Danh_sach_SP))
     return Danh_sach
 
-def Tao_chuoi_HTML_SP_moi(Danh_sach_SP_moi):
-    Chuoi_HTML='''
-    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner">
+def Tra_cuu_SP_moi(Danh_sach_SP):
+    Danh_sach = list(filter(
+        lambda SP:SP['san_pham_moi']!=0,Danh_sach_SP))
+    return Danh_sach
+
+def Tao_chuoi_HTML_Menu(Danh_sach_loai_SP):
+    Chuoi_HTML=""
+    Chuoi_HTML+='''
+    <div id="filters" class="sixteen columns">
+      <ul class="clearfix">
+         <li><a id="all" href="#" data-filter="*" class="active">
+          <h5>Tất cả</h5>
+          </a></li>
+          <li><a id="all" href="#" data-filter="#sp_1" class="active">
+          <h5>Sản phẩm mới</h5>
+          </a></li>
     '''
-    for San_pham in Danh_sach_SP_moi:
+    for Loai_SP in Danh_sach_loai_SP:
         Chuoi_HTML+='''
-        <div class="carousel-item">
-            <img class="d-block w-50" src="'''+\
-            url_for('static',filename='hinh/hinh_san_pham/'+san_pham["hinh"]) +'''" alt="Sản phẩm chưa có hình">
+          <li><a class="" href="#" data-filter=".'''+ str(Loai_SP['ma_loai']) +'''" >
+          <h5>''' +Loai_SP['ten_loai'] + '''</h5>
+          </a></li>
         '''
+    Chuoi_HTML+='</ul>'
     Chuoi_HTML+='</div>'
-    
+    return Markup(Chuoi_HTML)
 
         

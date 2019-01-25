@@ -1,4 +1,25 @@
 {% extends 'layouts/layout.html' %}
+{% block header %}
+  <header id="header_outer">
+  <div class="container">
+    <div class="header_section">
+      <div class="logo"><a href="javascript:void(0)"><img src="{{url_for('static',filename='css_js_client/img/logob.png')}}" alt="Lỗi hình ảnh"></a></div>
+      <nav class="nav" id="nav">
+        <ul class="toggle">
+          <li><a href="/">Trang chủ</a></li>
+          <li><a href="#contact">Liên hệ</a></li>
+        </ul>
+        <ul class="">
+          <li><a href="/">Trang chủ</a></li>
+          <li><a href="#contact">Liên hệ</a></li>
+        </ul>
+      </nav>
+      <a class="res-nav_click animated wobble wow"  href="javascript:void(0)"><i class="fa-bars"></i></a> </div>
+  </div>
+</header>
+
+{% endblock header %}
+
 {% block content %} 
      <form method="post" action="/Dang_ky">
         <div class="CUA_SO_1" style="background-color:whitesmoke">
@@ -34,7 +55,7 @@
             {% endfor %}    
         </div>
 
-        <div class="CUA_SO_2" style="margin:15px">
+        <div class="CUA_SO_2" style="margin:5px">
             <div class="btn TOM_TAT" style="color:blue">
             {{Chuoi_ket_qua}}
             </div>

@@ -1,0 +1,50 @@
+{% extends 'layouts/layout.html' %}
+{% block title  %}
+    Mỹ phẩm Đẹp
+{% endblock  %}
+{% block head %}
+  {{ super() }}
+  <style type="text/css">
+    .important { color: #336699; }
+  </style>
+{% endblock %}
+{% block header %}
+  <header id="header_outer">
+  <div class="container">
+    <div class="header_section">
+      <div class="logo"><a href="javascript:void(0)"><img src="{{url_for('static',filename='css_js_client/img/logob.png')}}" alt="Lỗi hình ảnh"></a></div>
+      <nav class="nav" id="nav">
+        <ul class="toggle">
+          <li><a href="/">Trang chủ</a></li>
+          <li><a href="#contact">Liên hệ</a></li>
+        </ul>
+        <ul class="">
+          <li><a href="/">Trang chủ</a></li>
+          <li><a href="#contact">Liên hệ</a></li>
+        </ul>
+      </nav>
+      <a class="res-nav_click animated wobble wow"  href="javascript:void(0)"><i class="fa-bars"></i></a> </div>
+  </div>
+</header>
+
+{% endblock header %}
+
+
+{% block content %}
+<section id="top_content" class="top_cont_outer">
+  <div class="top_cont_inner">
+    <div class="container">
+      <div class="top_content">
+        <div class="row">
+          <div class="col-lg-5 col-sm-7">
+          <div class="top_left_cont flipInY wow animated animated" style="visibility: visible; animation-name: flipInY;">
+                <h2>Quý khách đã đặt hàng thành công, Xin cảm ơn!</h2>
+              <p> Xác nhận đơn hàng đã được gửi đến địa chỉ mail của quý khách. </p>
+              <a href="/" class="learn_more2">Trở lại trang chủ</a> </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
