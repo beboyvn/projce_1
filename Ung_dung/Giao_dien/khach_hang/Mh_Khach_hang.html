@@ -27,6 +27,7 @@
 
 {% endblock header %}
 {% block content %}
+
   <div class="c-logo-part-1"><!--c-logo-part-start-->
   <div class="container">
     <ul class="delay-06s animated  bounce wow animated" style="visibility: visible; animation-name: bounce;">
@@ -35,6 +36,18 @@
     </div>
     </ul>
   </div>
+</div>
+<div class="wow fadeInLeft delay-05s animated" style="visibility: visible; animation-name: fadeInLeft;">
+  <form name="SearchBar" method="post" class="search-bar"> 
+        <input class="animated wow flipInY delay-02s animated button" type="text-search"
+          name="Th_Chuoi_tra_cuu" spellcheck="false" autocomplete="off" placeholder="Tìm sản phẩm" value="" />
+          <button class="btn" onclick="javascript:submitform()">Tim kiếm </button>
+  </form>
+<script type="text/javascript">
+  function submitform(){
+    document.SearchBar.submit()
+  }
+</script>
 </div>
   {{chuoi_the_hien}}
   {{chuoi_modal}}

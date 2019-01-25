@@ -249,3 +249,24 @@ def Lay_so_hoa_don():
     so_hoa_don = {"so_hoa_don":Hoa_don.so_hoa_don}
     
     return so_hoa_don["so_hoa_don"]
+
+def Tra_cuu_SP(Chuoi_tra_cuu,Danh_sach_SP):
+    Danh_sach =list(filter(
+        lambda SP: Chuoi_tra_cuu.upper() in SP['ten_san_pham'].upper(),Danh_sach_SP))
+    return Danh_sach
+
+def Tao_chuoi_HTML_SP_moi(Danh_sach_SP_moi):
+    Chuoi_HTML='''
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+    '''
+    for San_pham in Danh_sach_SP_moi:
+        Chuoi_HTML+='''
+        <div class="carousel-item">
+            <img class="d-block w-50" src="'''+\
+            url_for('static',filename='hinh/hinh_san_pham/'+san_pham["hinh"]) +'''" alt="Sản phẩm chưa có hình">
+        '''
+    Chuoi_HTML+='</div>'
+    
+
+        

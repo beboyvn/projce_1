@@ -28,6 +28,13 @@ def index():
     Danh_sach_SP_chon =[]
     Danh_sach_san_pham = Doc_danh_sach_SP()
     Da_dang_nhap = False
+    Danh_sach_SP_hien_thi=Danh_sach_san_pham
+    Chuoi_tra_cuu =""
+#**************Chức năng tìm kiếm********
+    if request.form.get('Th_Chuoi_tra_cuu')!=None:
+        Chuoi_tra_cuu=request.form.get('Th_Chuoi_tra_cuu')
+        print('Chuỗi tra cứu',Chuoi_tra_cuu)
+        Danh_sach_SP_hien_thi =Tra_cuu_SP(Chuoi_tra_cuu,Danh_sach_san_pham)
 
 #**************Menu khach hang************
 
@@ -113,9 +120,10 @@ def index():
 
     #****************kết xuất dữ liệu****************
     chuoi_HTML_gio_hang = Tao_chuoi_HTML_gio_hang(Danh_sach_SP_chon)
-    chuoi_the_hien=Tao_chuoi_HTML_Danh_sach_SP(Danh_sach_san_pham)
+    chuoi_the_hien=Tao_chuoi_HTML_Danh_sach_SP(Danh_sach_SP_hien_thi)
     chuoi_modal = Tao_chuoi_HTML_Modal(Danh_sach_san_pham,Da_dang_nhap)
     Khung =render_template("khach_hang/MH_Khach_hang.html",
+        Chuoi_tra_cuu= Chuoi_tra_cuu,
         Chuoi_HTML_Khach_hang= Chuoi_HTML_Khach_hang,
         Chuoi_QL_Dang_nhap=Markup(Chuoi_QL_Dang_nhap),
         chuoi_HTML_gio_hang=chuoi_HTML_gio_hang,
